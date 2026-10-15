@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Console/Console.csproj" Id="d2be471c-dc8f-4ea5-a838-be5cbc332296" />
+  <Project Path="DataAccessLayer/DataAccessLayer.csproj" />
+  <Project Path="Logic/Logic.csproj" Id="7719008a-8d58-4565-976c-3268ba73bff3" />
+  <Project Path="Model/Model.csproj" />
+</Solution>
