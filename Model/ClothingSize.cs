@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Model
 {
+    /// <summary>
+    /// Определяет размеры одежды, доступные в магазине.
+    /// </summary>
     public enum ClothingSize
     {
         XS,

@@ -55,7 +55,6 @@
             bReturn.TabIndex = 13;
             bReturn.Text = "Вернуть";
             bReturn.UseVisualStyleBackColor = true;
-            //bReturn.Click += bReturn_Click;
             // 
             // label3
             // 
@@ -97,7 +96,10 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(dCatalog);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             Name = "HistoryForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "HistoryForm";
             ((System.ComponentModel.ISupportInitialize)dCatalog).EndInit();
             ResumeLayout(false);

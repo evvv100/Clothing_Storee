@@ -209,7 +209,10 @@
             Controls.Add(label1);
             Controls.Add(label3);
             Controls.Add(label2);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             Name = "ChangeClothingForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "ChangeClothingForm";
             ResumeLayout(false);
             PerformLayout();

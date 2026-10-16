@@ -11,8 +11,14 @@ using System.Windows.Forms;
 
 namespace WinForms
 {
+    /// <summary>
+    /// Форма для добавления нового товара в ассортимент магазина с валидацией введенных данных.
+    /// </summary>
     public partial class AddClothingForm : Form
     {
+        /// <summary>
+        /// Инициализирует новый экземпляр формы AddClothingForm, настраивает интерфейс и подписывается на события.
+        /// </summary>
         public AddClothingForm()
         {
             InitializeComponent();

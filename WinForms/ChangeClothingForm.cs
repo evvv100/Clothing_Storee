@@ -12,10 +12,19 @@ using System.Windows.Forms;
 
 namespace WinForms
 {
+    /// <summary>
+    /// Форма для редактирования параметров существующего товара (названия, категории, размера и цены).
+    /// </summary>
     public partial class ChangeClothingForm : Form
     {
+        /// <summary>
+        /// Уникальный идентификатор (артикул) редактируемого товара.
+        /// </summary>
         public int Id { get; set; }
-
+        /// <summary>
+        /// Инициализирует новый экземпляр формы ChangeClothingForm для указанного ID товара, настраивает интерфейс и подписывается на события.
+        /// </summary>
+        /// <param name="id">Идентификатор товара, который нужно изменить.</param>
         public ChangeClothingForm(int id)
         {
             InitializeComponent();

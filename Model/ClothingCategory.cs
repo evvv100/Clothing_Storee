@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Model
 {
+    /// <summary>
+    /// Определяет категорию товара.
+    /// </summary>
     public enum ClothingCategory
     {
         TShirt,

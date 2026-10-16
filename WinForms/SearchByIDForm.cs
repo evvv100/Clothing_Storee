@@ -10,6 +10,9 @@ namespace WinForms
     /// </summary>
     public partial class SearchByIDForm : Form
     {
+        /// <summary>
+        /// Инициализирует новый экземпляр формы SearchByIDForm и подписывается на события кнопок.
+        /// </summary>
         public SearchByIDForm()
         {
             InitializeComponent();
@@ -19,7 +22,7 @@ namespace WinForms
             bRemove.Click += BRemove_Click;
             bAdd.Click += BAdd_Click;
 
-            UpdateTableData();   
+            UpdateTableData();
         }
 
         /// <summary>
@@ -141,6 +144,11 @@ namespace WinForms
 
             id = Convert.ToInt32(cellValue);
             return true;
+        }
+
+        private void SearchByIDForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

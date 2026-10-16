@@ -11,12 +11,27 @@ using System.Threading.Tasks;
 
 namespace ClothingStore.ConsoleApp
 {
+    /// <summary>
+    /// Главный класс консольного приложения, отвечающий за интерфейс пользователя и обработку меню.
+    /// </summary>
     internal class Program
     {
+        /// <summary>
+        /// Объект бизнес-логики для управления ассортиментом товаров и корзиной.
+        /// </summary>
         private static Logic.Logic _logic = new Logic.Logic(new EntityRepository<Clothing>());
+        /// <summary>
+        /// Генератор случайных чисел для инициализации баланса пользователя.
+        /// </summary>
         private static Random rnd = new Random();
+        /// <summary>
+        /// Баланс пользователя.
+        /// </summary>
         private static int _balance = rnd.Next(10000, 20001);
-
+        /// <summary>
+        /// Точка входа в программу. Запускает главный цикл меню взаимодействия с пользователем.
+        /// </summary>
+        /// <param name="args">Аргументы командной строки.</param>
         static void Main(string[] args)
         {
             if (_logic.GetCatalog().Count == 0)
@@ -57,7 +72,7 @@ namespace ClothingStore.ConsoleApp
         }
 
         /// <summary>
-        /// Экран каталога: показывает список товаров и позволяет добавить, изменить или удалить товар
+        /// Экран каталога, показывает список товаров и позволяет добавить, изменить или удалить товар
         /// </summary>
         private static void ShowCatalog()
         {

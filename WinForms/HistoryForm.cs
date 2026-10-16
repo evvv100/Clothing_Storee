@@ -6,8 +6,14 @@ using System.Windows.Forms;
 
 namespace WinForms
 {
+    /// <summary>
+    /// Форма истории покупок, отображающая проданные товары с возможностью их возврата.
+    /// </summary>
     public partial class HistoryForm : Form
     {
+        /// <summary>
+        /// Инициализирует новый экземпляр формы HistoryForm, настраивает отображение баланса и подписывается на события кнопок.
+        /// </summary>
         public HistoryForm()
         {
             InitializeComponent();
@@ -57,7 +63,7 @@ namespace WinForms
         }
 
         /// <summary>
-        /// Обновляет данные в dataGridView dCatalog
+        /// Обновляет данные в dCatalog(dataGridView)
         /// </summary>
         private void UpdateData()
         {

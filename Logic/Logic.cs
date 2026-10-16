@@ -3,9 +3,20 @@ using DataAccessLayer;
 
 namespace Logic
 {
+    /// <summary>
+    /// Класс бизнес-логики, управляющий каталогом одежды, процессами покупки и возврата товаров.
+    /// </summary>
     public class Logic
     {
+        /// <summary>
+        /// Репозиторий для доступа к данным и постоянному хранилищу одежды.
+        /// </summary>
         private readonly IRepository<Clothing> _repository;
+        /// <summary>
+        /// Инициализирует новый экземпляр класса Logic с заданным репозиторием.
+        /// </summary>
+        /// <param name="repository">Экземпляр репозитория для работы с данными.</param>
+        /// <exception cref="ArgumentNullException">Исключение генерируется, если переданный репозиторий равен null.</exception>
         public Logic(IRepository<Clothing> repository)
         {
             if (repository == null)
@@ -16,18 +27,21 @@ namespace Logic
         }
 
         /// <summary>
-        /// Добавляет одежду в каталог
+        /// Создает и добавляет новую единицу одежды в каталог магазина.
         /// </summary>
-        /// <param name="clothing">Одежда, которую надо добавить</param>
+        /// <param name="name">Название вещи.</param>
+        /// <param name="category">Категория одежды.</param>
+        /// <param name="size">Размер одежды.</param>
+        /// <param name="price">Цена товара.</param>
         public void AddClothing(string name, ClothingCategory category, ClothingSize size, int price)
         {
             var clothing = new Clothing(0, name, category, size, price);
             _repository.Add(clothing);
         }
         /// <summary>
-        /// Удаляет одежду из каталога по Id
+        /// Возвращает список всех доступных для продажи товаров в каталоге.
         /// </summary>
-        /// <param name="id">Id одежды, которую нужно удалить из каталога</param>
+        /// <returns>Список объектов Clothing, которые еще не были проданы.</returns>
         public void RemoveClothing(int id)
         {
             Clothing existing = _repository.ReadById(id);
@@ -46,8 +60,9 @@ namespace Logic
             return _repository.ReadAll().Where(c => !c.IsSold).ToList();
         }
         /// <summary>
-        /// Возвращает купленные товары (история покупок)
+        /// Возвращает список проданных товаров (историю покупок).
         /// </summary>
+        /// <returns>Список объектов Clothing со статусом "Продано".</returns>
         public List<Clothing> GetPurchased()
         {
             return _repository.ReadAll().Where(c => c.IsSold).ToList();
@@ -63,9 +78,10 @@ namespace Logic
             return _repository.ReadById(id);
         }
         /// <summary>
-        /// Изменяет конкретный товар по Id (Id сохраняется)
+        /// Оформляет покупку списка товаров, помечая их как проданные.
         /// </summary>
-        /// <param name="clothing">Объект Clothing, который нужно изменить в каталоге</param>
+        /// <param name="basket">Список товаров из корзины для оформления покупки.</param>
+        /// <exception cref="InvalidOperationException">Генерируется, если корзина пуста или один из товаров уже продан/отсутствует.</exception>
         public void ChangeClothing(Clothing clothing)
         {
             Clothing existing = _repository.ReadById(clothing.Id);
@@ -122,7 +138,9 @@ namespace Logic
             item.IsSold = false;
             _repository.Update(item);
         }
-
+        /// <summary>
+        /// Заполняет хранилище данных начальным тестовым набором одежды разного типа и размеров.
+        /// </summary>
         public void FilledTable()
         {
             AddClothing("Белая футболка", ClothingCategory.TShirt, ClothingSize.M, 1500);

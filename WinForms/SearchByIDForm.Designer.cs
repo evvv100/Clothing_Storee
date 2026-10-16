@@ -138,7 +138,9 @@
             MaximumSize = new Size(818, 497);
             MinimumSize = new Size(818, 497);
             Name = "SearchByIDForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "SearchByIDForm";
+            Load += SearchByIDForm_Load;
             ((System.ComponentModel.ISupportInitialize)dCatalog).EndInit();
             ResumeLayout(false);
             PerformLayout();

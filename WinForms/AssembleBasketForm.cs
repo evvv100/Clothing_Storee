@@ -7,11 +7,18 @@ using System.Windows.Forms;
 
 namespace WinForms
 {
+    /// <summary>
+    /// Форма для сборки корзины покупок с возможностью фильтрации товаров по размеру и расчета стоимости.
+    /// </summary>
     public partial class AssembleBasketForm : Form
     {
-        // Корзина хранится только в памяти формы. В БД товары не трогаются до оплаты.
+        /// <summary>
+        /// Список товаров, добавленных в текущую корзину покупателя.
+        /// </summary>
         private readonly List<Clothing> _basket = new List<Clothing>();
-
+        /// <summary>
+        /// Инициализирует новый экземпляр формы AssembleBasketForm, настраивает элементы интерфейса, списки и подписывается на события.
+        /// </summary>
         public AssembleBasketForm()
         {
             InitializeComponent();
@@ -97,7 +104,7 @@ namespace WinForms
             {
                 MessageBox.Show("Не удалось оформить покупку:\n" + ex.Message,
                     "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                UpdateCatalog();   // каталог мог измениться - показываем актуальный
+                UpdateCatalog();   
                 return;
             }
 
@@ -237,7 +244,7 @@ namespace WinForms
                 grid.Columns["IsSold"].Visible = false;
         }
 
-        // Пустые обработчики ниже можно удалить, если они не привязаны в AssembleBasketForm.Designer.cs
+        
         private void label1_Click(object? sender, EventArgs e)
         {
         }

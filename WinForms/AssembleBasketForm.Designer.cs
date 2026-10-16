@@ -216,7 +216,10 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(dCatalog);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             Name = "AssembleBasketForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "AssembleBasketForm";
             Load += AssembleBasketForm_Load;
             ((System.ComponentModel.ISupportInitialize)dCatalog).EndInit();
