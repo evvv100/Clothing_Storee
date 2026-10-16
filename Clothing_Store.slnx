@@ -3,4 +3,5 @@
   <Project Path="DataAccessLayer/DataAccessLayer.csproj" />
   <Project Path="Logic/Logic.csproj" Id="7719008a-8d58-4565-976c-3268ba73bff3" />
   <Project Path="Model/Model.csproj" />
+  <Project Path="WinForms/WinForms.csproj" Id="be39b176-6b4e-4214-9bea-1ffa6bce49e7" />
 </Solution>
