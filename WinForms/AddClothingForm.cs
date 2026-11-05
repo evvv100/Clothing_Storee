@@ -26,7 +26,6 @@ namespace WinForms
             bCancel.Click += BCancel_Click;
 
             tID.ReadOnly = true;
-            label2.Text = MainForm._balance.ToString();
         }
         /// <summary>
         /// Закрывает форму
@@ -108,7 +107,7 @@ namespace WinForms
 
             try
             {
-                MainForm._logic.AddClothing(name, category, size, price);
+                SearchByIDForm._logic.AddClothing(name, category, size, price);
             }
             catch (Exception ex)
             {

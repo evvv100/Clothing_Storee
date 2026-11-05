@@ -29,13 +29,16 @@
         private void InitializeComponent()
         {
             dCatalog = new DataGridView();
-            label1 = new Label();
-            label2 = new Label();
-            label3 = new Label();
             bChange = new Button();
             bAdd = new Button();
             bRemove = new Button();
             bCancel = new Button();
+            cSize = new ComboBox();
+            checkBox1 = new CheckBox();
+            label5 = new Label();
+            cCategory = new ComboBox();
+            checkBox2 = new CheckBox();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)dCatalog).BeginInit();
             SuspendLayout();
             // 
@@ -43,40 +46,12 @@
             // 
             dCatalog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dCatalog.Location = new Point(43, 72);
+            dCatalog.MultiSelect = false;
             dCatalog.Name = "dCatalog";
             dCatalog.RowHeadersWidth = 51;
+            dCatalog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dCatalog.Size = new Size(719, 289);
             dCatalog.TabIndex = 0;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(349, 40);
-            label1.Name = "label1";
-            label1.Size = new Size(100, 31);
-            label1.TabIndex = 1;
-            label1.Text = "Каталог";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(8, 6);
-            label2.Name = "label2";
-            label2.Size = new Size(138, 28);
-            label2.TabIndex = 2;
-            label2.Text = "Ваш баланс: ";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.Location = new Point(155, 6);
-            label3.Name = "label3";
-            label3.Size = new Size(72, 28);
-            label3.TabIndex = 3;
-            label3.Text = "10000";
             // 
             // bChange
             // 
@@ -120,18 +95,78 @@
             bCancel.Text = "Назад";
             bCancel.UseVisualStyleBackColor = true;
             // 
+            // cSize
+            // 
+            cSize.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cSize.FormattingEnabled = true;
+            cSize.Location = new Point(275, 13);
+            cSize.Name = "cSize";
+            cSize.Size = new Size(69, 39);
+            cSize.TabIndex = 22;
+            // 
+            // checkBox1
+            // 
+            checkBox1.AutoSize = true;
+            checkBox1.Location = new Point(240, 24);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(18, 17);
+            checkBox1.TabIndex = 20;
+            checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label5.Location = new Point(43, 19);
+            label5.Name = "label5";
+            label5.Size = new Size(174, 23);
+            label5.TabIndex = 21;
+            label5.Text = "Фильтровать размер";
+            // 
+            // cCategory
+            // 
+            cCategory.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cCategory.FormattingEnabled = true;
+            cCategory.Location = new Point(634, 13);
+            cCategory.Name = "cCategory";
+            cCategory.Size = new Size(128, 39);
+            cCategory.TabIndex = 25;
+            // 
+            // checkBox2
+            // 
+            checkBox2.AutoSize = true;
+            checkBox2.Location = new Point(599, 24);
+            checkBox2.Name = "checkBox2";
+            checkBox2.Size = new Size(18, 17);
+            checkBox2.TabIndex = 23;
+            checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.Location = new Point(373, 19);
+            label1.Name = "label1";
+            label1.Size = new Size(200, 23);
+            label1.TabIndex = 24;
+            label1.Text = "Фильтровать категорию";
+            label1.Click += label1_Click;
+            // 
             // SearchByIDForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(cCategory);
+            Controls.Add(checkBox2);
+            Controls.Add(label1);
+            Controls.Add(cSize);
+            Controls.Add(checkBox1);
+            Controls.Add(label5);
             Controls.Add(bCancel);
             Controls.Add(bRemove);
             Controls.Add(bAdd);
             Controls.Add(bChange);
-            Controls.Add(label3);
-            Controls.Add(label2);
-            Controls.Add(label1);
             Controls.Add(dCatalog);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -149,12 +184,15 @@
         #endregion
 
         private DataGridView dCatalog;
-        private Label label1;
-        private Label label2;
-        private Label label3;
         private Button bChange;
         private Button bAdd;
         private Button bRemove;
         private Button bCancel;
+        private ComboBox cSize;
+        private CheckBox checkBox1;
+        private Label label5;
+        private ComboBox cCategory;
+        private CheckBox checkBox2;
+        private Label label1;
     }
 }

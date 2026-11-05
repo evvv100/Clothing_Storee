@@ -28,8 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            label3 = new Label();
-            label2 = new Label();
             label1 = new Label();
             label4 = new Label();
             label5 = new Label();
@@ -44,26 +42,6 @@
             bAdd = new Button();
             bCancel = new Button();
             SuspendLayout();
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.Location = new Point(155, 6);
-            label3.Name = "label3";
-            label3.Size = new Size(72, 28);
-            label3.TabIndex = 5;
-            label3.Text = "10000";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(8, 6);
-            label2.Name = "label2";
-            label2.Size = new Size(138, 28);
-            label2.TabIndex = 4;
-            label2.Text = "Ваш баланс: ";
             // 
             // label1
             // 
@@ -206,8 +184,6 @@
             Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(label1);
-            Controls.Add(label3);
-            Controls.Add(label2);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             Name = "AddClothingForm";
@@ -219,9 +195,6 @@
         }
 
         #endregion
-
-        private Label label3;
-        private Label label2;
         private Label label1;
         private Label label4;
         private Label label5;

@@ -98,7 +98,7 @@ namespace WinForms
 
             try
             {
-                MainForm._logic.Buy(_basket);
+               // MainForm._logic.Buy(_basket);
             }
             catch (Exception ex)
             {
@@ -151,18 +151,18 @@ namespace WinForms
             try
             {
                 Clothing? item = MainForm._logic.GetClothingById(selectedId);
-                if (item == null || item.IsSold)
-                {
-                    MessageBox.Show("Такого товара не существует!", "Неизвестный товар", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else if (_basket.Any(b => b.Id == item.Id))
-                {
-                    MessageBox.Show("Этот товар уже в корзине.", "Товар в корзине", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    _basket.Add(item);
-                }
+                //if (item == null || item.IsSold)
+                //{
+                //    MessageBox.Show("Такого товара не существует!", "Неизвестный товар", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //}
+                //else if (_basket.Any(b => b.Id == item.Id))
+                //{
+                //    MessageBox.Show("Этот товар уже в корзине.", "Товар в корзине", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //}
+                //else
+                //{
+                //    _basket.Add(item);
+                //}
             }
             catch (Exception ex)
             {
@@ -200,28 +200,28 @@ namespace WinForms
         /// </summary>
         private void UpdateCatalog()
         {
-            List<Clothing> clothing;
-            try
-            {
-                clothing = MainForm._logic.GetCatalog()
-                    .Where(c => !_basket.Any(b => b.Id == c.Id))
-                    .ToList();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Не удалось загрузить каталог:\n" + ex.Message,
-                    "Ошибка базы данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                clothing = new List<Clothing>();
-            }
+            //List<Clothing> clothing;
+            ////try
+            ////{
+            ////    clothing = MainForm._logic.GetCatalog()
+            ////        .Where(c => !_basket.Any(b => b.Id == c.Id))
+            ////        .ToList();
+            ////}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Не удалось загрузить каталог:\n" + ex.Message,
+            //        "Ошибка базы данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    clothing = new List<Clothing>();
+            //}
 
-            if (checkBox1.Checked && cSize.SelectedItem is ClothingSize size)
-            {
-                clothing = clothing.Where(c => c.Size == size).ToList();
-            }
+            //if (checkBox1.Checked && cSize.SelectedItem is ClothingSize size)
+            //{
+            //    clothing = clothing.Where(c => c.Size == size).ToList();
+            //}
 
-            dCatalog.DataSource = null;
-            dCatalog.DataSource = clothing;
-            SetHeaders(dCatalog);
+            //dCatalog.DataSource = null;
+            //dCatalog.DataSource = clothing;
+            //SetHeaders(dCatalog);
         }
 
         /// <summary>

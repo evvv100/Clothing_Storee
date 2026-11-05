@@ -33,7 +33,6 @@ namespace WinForms
             bChange.Click += BChange_Click;
             bCancel.Click += BCancel_Click;
             ControlBox = false;
-            label2.Text = MainForm._balance.ToString();
             Id = id;
             lID.Text = Id.ToString();
         }
@@ -107,7 +106,7 @@ namespace WinForms
             try
             {
                 Clothing newClothing = new Clothing(Id, name, category, size, price);
-                MainForm._logic.ChangeClothing(newClothing);
+                SearchByIDForm._logic.ChangeClothing(newClothing);
             }
             catch (Exception ex)
             {
@@ -147,7 +146,7 @@ namespace WinForms
                 return;
             }
 
-            if (current == null || current.IsSold)
+            if (current == null)
             {
                 MessageBox.Show("Товар не найден в каталоге.",
                     "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);

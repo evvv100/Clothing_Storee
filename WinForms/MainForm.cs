@@ -34,7 +34,7 @@ namespace WinForms
         public MainForm()
         {
             InitializeComponent();
-            if (_logic.GetCatalog().Count == 0)
+            if (_logic.GetAll().Count == 0)
             {
                 _logic.FilledTable();
             }

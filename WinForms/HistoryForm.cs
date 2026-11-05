@@ -42,16 +42,16 @@ namespace WinForms
             try
             {
                 Clothing? item = MainForm._logic.GetClothingById(selectedId);
-                if (item == null || !item.IsSold)
-                {
-                    MessageBox.Show("Такого товара не существует!", "Неизвестный товар", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-                    MainForm._logic.ReturnToStore(selectedId);
-                    MainForm._balance += item.Price;
-                    label2.Text = MainForm._balance.ToString();
-                }
+                //if (item == null || !item.IsSold)
+                //{
+                //    MessageBox.Show("Такого товара не существует!", "Неизвестный товар", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //}
+                //else
+                //{
+                //    //MainForm._logic.ReturnToStore(selectedId);
+                //    //MainForm._balance += item.Price;
+                //    //label2.Text = MainForm._balance.ToString();
+                //}
             }
             catch (Exception ex)
             {
@@ -70,7 +70,7 @@ namespace WinForms
             List<Clothing> purchased;
             try
             {
-                purchased = MainForm._logic.GetPurchased();
+                //purchased = MainForm._logic.GetPurchased();
             }
             catch (Exception ex)
             {
@@ -80,7 +80,7 @@ namespace WinForms
             }
 
             dCatalog.DataSource = null;
-            dCatalog.DataSource = purchased;
+            //dCatalog.DataSource = purchased;
 
             if (dCatalog.Columns["Id"] != null)
                 dCatalog.Columns["Id"].HeaderText = "Артикул";

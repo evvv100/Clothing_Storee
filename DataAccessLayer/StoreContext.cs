@@ -13,6 +13,7 @@ namespace DataAccessLayer
     /// </summary>
     public class StoreContext : DbContext
     {
+
         /// <summary>
         /// Набор данных для управления таблицей одежды в базе данных.
         /// </summary>

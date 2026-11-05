@@ -4,7 +4,7 @@ using DataAccessLayer;
 namespace Logic
 {
     /// <summary>
-    /// Класс бизнес-логики, управляющий каталогом одежды, процессами покупки и возврата товаров.
+    /// Класс бизнес-логики, управляющий товарами на складе: добавление, изменение, удаление, фильтрация по размеру и категории.
     /// </summary>
     public class Logic
     {
@@ -27,7 +27,7 @@ namespace Logic
         }
 
         /// <summary>
-        /// Создает и добавляет новую единицу одежды в каталог магазина.
+        /// Создает и добавляет новый товар на склад.
         /// </summary>
         /// <param name="name">Название вещи.</param>
         /// <param name="category">Категория одежды.</param>
@@ -39,55 +39,49 @@ namespace Logic
             _repository.Add(clothing);
         }
         /// <summary>
-        /// Возвращает список всех доступных для продажи товаров в каталоге.
+        /// Удаляет товар со склада по ID.
         /// </summary>
-        /// <returns>Список объектов Clothing, которые еще не были проданы.</returns>
+        /// <param name="id">Артикул удаляемого товара.</param>
+        /// <exception cref="InvalidOperationException">Генерируется, если товар не найден на складе.</exception>
         public void RemoveClothing(int id)
         {
             Clothing existing = _repository.ReadById(id);
-            if (existing == null || existing.IsSold)
+            if (existing == null)
             {
                 throw new InvalidOperationException("Товар не найден в каталоге.");
             }
             _repository.Delete(id);
         }
         /// <summary>
-        /// Возвращает список - каталог товаров в логике
+        /// Возвращает список всех товаров, хранящихся на складе.
         /// </summary>
-        /// <param name="clothing">Список товаров, который хранится в экзмепляре класса Logic</param>
-        public List<Clothing> GetCatalog()
+        /// <returns>Список объектов Clothing.</returns>
+        public List<Clothing> GetAll()
         {
-            return _repository.ReadAll().Where(c => !c.IsSold).ToList();
-        }
-        /// <summary>
-        /// Возвращает список проданных товаров (историю покупок).
-        /// </summary>
-        /// <returns>Список объектов Clothing со статусом "Продано".</returns>
-        public List<Clothing> GetPurchased()
-        {
-            return _repository.ReadAll().Where(c => c.IsSold).ToList();
+            return _repository.ReadAll();
         }
 
         /// <summary>
         /// Возвращает одежду по Id
         /// </summary>
         /// <param name="id">Id товара, который нужен</param>
-        /// <returns>Возвращает объект Clothing по Id</returns>
+        /// <returns>Объект Clothing или null, если товар не найден.</returns>
         public Clothing GetClothingById(int id)
         {
             return _repository.ReadById(id);
         }
+
         /// <summary>
-        /// Оформляет покупку списка товаров, помечая их как проданные.
+        /// Изменяет данные товара на складе (артикул сохраняется).
         /// </summary>
-        /// <param name="basket">Список товаров из корзины для оформления покупки.</param>
-        /// <exception cref="InvalidOperationException">Генерируется, если корзина пуста или один из товаров уже продан/отсутствует.</exception>
+        /// <param name="clothing">Товар с новыми данными. Артикул определяет, какой товар изменяется.</param>
+        /// <exception cref="InvalidOperationException">Генерируется, если товар не найден на складе.</exception>
         public void ChangeClothing(Clothing clothing)
         {
             Clothing existing = _repository.ReadById(clothing.Id);
-            if (existing == null || existing.IsSold)
+            if (existing == null)
             {
-                throw new InvalidOperationException("Товар не найден в каталоге.");
+                throw new InvalidOperationException("Товар не найден на складе.");
             }
             existing.Name = clothing.Name.Trim();
             existing.Category = clothing.Category;
@@ -96,47 +90,35 @@ namespace Logic
             _repository.Update(existing);
         }
         /// <summary>
-        /// Оформляет покупку: помечает товары купленными. Если хоть один товар уже недоступен - ничего не покупается
+        /// Возвращает список товаров указанного размера.
         /// </summary>
-        /// <param name="items">Товары из корзины</param>
-        public void Buy(List<Clothing> basket)
+        /// <param name="source">Список товаров, который нужно отфильтровать.</param>
+        /// <param name="size">Размер, по которому выполняется фильтрация.</param>
+        /// <returns>Список товаров указанного размера.</returns>
+        /// <exception cref="ArgumentNullException">Генерируется, если список равен null.</exception>
+        public List<Clothing> FilterBySize(List<Clothing> source, ClothingSize size)
         {
-            if (basket == null || basket.Count == 0)
+            if (source == null)
             {
-                throw new InvalidOperationException("Корзина пуста.");
+                throw new ArgumentNullException(nameof(source));
             }
-
-            foreach (Clothing item in basket)
-            {
-                Clothing current = _repository.ReadById(item.Id);
-
-                if (current == null || current.IsSold)
-                {
-                    throw new InvalidOperationException($"Товар «{item.Name}» уже недоступен.");
-                }
-            }
-
-            foreach (Clothing item in basket)
-            {
-                Clothing current = _repository.ReadById(item.Id);
-                current.IsSold = true;
-                _repository.Update(current);
-            }
+            return source.Where(c => c.Size == size).ToList();
         }
 
         /// <summary>
-        /// Возвращает купленный товар обратно в магазин
+        /// Возвращает список товаров указанной категории.
         /// </summary>
-        /// <param name="id">Id купленного товара</param>
-        public void ReturnToStore(int id)
+        /// <param name="source">Список товаров, который нужно отфильтровать.</param>
+        /// <param name="category">Категория, по которой выполняется фильтрация.</param>
+        /// <returns>Список товаров указанной категории.</returns>
+        /// <exception cref="ArgumentNullException">Если переданный список равен null.</exception>
+        public List<Clothing> FilterByCategory(List<Clothing> source, ClothingCategory category)
         {
-            Clothing item = _repository.ReadById(id);
-            if (item == null || !item.IsSold)
+            if (source == null)
             {
-                throw new InvalidOperationException("Такого купленного товара нет.");
+                throw new ArgumentNullException(nameof(source));
             }
-            item.IsSold = false;
-            _repository.Update(item);
+            return source.Where(c => c.Category == category).ToList();
         }
         /// <summary>
         /// Заполняет хранилище данных начальным тестовым набором одежды разного типа и размеров.

@@ -29,16 +29,9 @@ namespace Model
         /// </summary>
         public int Price { get; set; }
         /// <summary>
-        /// Продан ли товар. True - продан, false - в наличии.
-        /// </summary>
-        public bool IsSold { get; set; }
-        /// <summary>
         /// Инициализирует новый экземпляр класса Clothing без параметров, необходимый для работы ORM.
         /// </summary>
-        public Clothing()
-        {
-
-        }
+        public Clothing() { }
         /// <summary>
         /// Инициализирует новый экземпляр класса Clothing с заданными параметрами.
         /// </summary>
@@ -54,7 +47,6 @@ namespace Model
             Category = category;
             Size = size;
             Price = price;
-            IsSold = false;
         }
     }
 }
