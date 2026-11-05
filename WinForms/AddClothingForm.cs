@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using Logic;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,11 +18,16 @@ namespace WinForms
     public partial class AddClothingForm : Form
     {
         /// <summary>
+        /// Интерфейс для добавления товара.
+        /// </summary>
+        private readonly IClothingCommand _clothingCommand;
+        /// <summary>
         /// Инициализирует новый экземпляр формы AddClothingForm, настраивает интерфейс и подписывается на события.
         /// </summary>
-        public AddClothingForm()
+        public AddClothingForm(IClothingCommand clothingCommand)
         {
             InitializeComponent();
+            _clothingCommand = clothingCommand;
             bAdd.Click += Add_Click;
             bCancel.Click += BCancel_Click;
 
@@ -107,7 +113,7 @@ namespace WinForms
 
             try
             {
-                MainForm._logic.AddClothing(name, category, size, price);
+                _clothingCommand.AddClothing(name, category, size, price);
             }
             catch (Exception ex)
             {

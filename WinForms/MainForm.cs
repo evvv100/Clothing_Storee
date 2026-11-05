@@ -3,6 +3,8 @@ using Model;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Ninject;
+using Logic;
 
 namespace WinForms
 {
@@ -12,14 +14,28 @@ namespace WinForms
     /// </summary>
     public partial class MainForm : Form
     {
-        public static Logic.Logic _logic = new Logic.Logic(new EntityRepository<Clothing>());
+        /// <summary>
+        /// Интерфейс для чтения и поиска товаров.
+        /// </summary>
+        private readonly IClothingQuery _queryLogic;
+        /// <summary>
+        /// Интерфейс для фильтрации товаров.
+        /// </summary>
+        private readonly IClothingFilter _filterLogic;
+        /// <summary>
+        /// Интерфейс для изменения, добавления и удаления товаров.
+        /// </summary>
+        private readonly IClothingCommand _commandLogic;
         /// <summary>
         /// Инициализирует новый экземпляр формы SearchByIDForm, настраивает таблицу и фильтры, подписывается на события.
         /// </summary>
-        public MainForm()
+        public MainForm(IClothingCommand clothingCommand, IClothingFilter clothingFilter, IClothingQuery clothingQuery)
         {
             InitializeComponent();
 
+            _commandLogic = clothingCommand;
+            _filterLogic = clothingFilter;
+            _queryLogic = clothingQuery;
             bChange.Click += BChange_Click;
             bCancel.Click += BCancel_Click;
             bRemove.Click += BRemove_Click;
@@ -69,7 +85,7 @@ namespace WinForms
         /// <param name="e">Аргумент данных события</param>
         private void BAdd_Click(object? sender, EventArgs e)
         {
-            AddClothingForm addClothingForm = new AddClothingForm();
+            AddClothingForm addClothingForm = Program.Kernel.Get<AddClothingForm>();
             addClothingForm.ShowDialog();
             UpdateTableData();
         }
@@ -94,7 +110,7 @@ namespace WinForms
             }
             try
             {
-                _logic.RemoveClothing(item.Id);
+                _commandLogic.RemoveClothing(item.Id);
                 MessageBox.Show("Товар удален!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (InvalidOperationException)
@@ -114,14 +130,14 @@ namespace WinForms
         /// <returns>Список товаров для отображения в таблице</returns>
         private List<Clothing> GetFilteredList()
         {
-            List<Clothing> list = _logic.GetAll();
+            List<Clothing> list = _queryLogic.GetAll();
             if (checkBox1.Checked && cSize.SelectedItem is ClothingSize size)
             {
-                list = _logic.FilterBySize(list, size);
+                list = _filterLogic.FilterBySize(list, size);
             }
             if (checkBox2.Checked && cCategory.SelectedItem is ClothingCategory category)
             {
-                list = _logic.FilterByCategory(list, category);
+                list = _filterLogic.FilterByCategory(list, category);
             }
             return list;
         }
@@ -201,7 +217,7 @@ namespace WinForms
             {
                 return;
             }
-            ChangeClothingForm changeClothingForm = new ChangeClothingForm(item!.Id);
+            ChangeClothingForm changeClothingForm = Program.Kernel.Get<ChangeClothingForm>();
             changeClothingForm.ShowDialog();
             UpdateTableData();
         }

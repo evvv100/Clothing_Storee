@@ -1,7 +1,14 @@
+using Ninject;
+using Logic;
+
 namespace WinForms
 {
     internal static class Program
     {
+        /// <summary>
+        /// DI контейнер
+        /// </summary>
+        public static IKernel Kernel { get; private set; }
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -11,7 +18,9 @@ namespace WinForms
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new MainForm());
+            Kernel = new StandardKernel(new SimpleConfigModule());
+            var mainForm = Kernel.Get<MainForm>();
+            Application.Run(mainForm);
         }
     }
 }

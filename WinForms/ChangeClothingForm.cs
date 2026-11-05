@@ -1,4 +1,5 @@
 ﻿using Model;
+using Logic;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,6 +19,14 @@ namespace WinForms
     public partial class ChangeClothingForm : Form
     {
         /// <summary>
+        /// Интерфейс для чтения данных товара (поиск по ID).
+        /// </summary>
+        private readonly IClothingQuery _queryLogic;
+        /// <summary>
+        /// Интерфейс для изменения данных товара.
+        /// </summary>
+        private readonly IClothingCommand _commandLogic;
+        /// <summary>
         /// Уникальный идентификатор (артикул) редактируемого товара.
         /// </summary>
         public int Id { get; set; }
@@ -25,10 +34,12 @@ namespace WinForms
         /// Инициализирует новый экземпляр формы ChangeClothingForm для указанного ID товара, настраивает интерфейс и подписывается на события.
         /// </summary>
         /// <param name="id">Идентификатор товара, который нужно изменить.</param>
-        public ChangeClothingForm(int id)
+        public ChangeClothingForm(int id, IClothingQuery queryLogic, IClothingCommand commandLogic)
         {
             InitializeComponent();
 
+            _queryLogic = queryLogic ?? throw new ArgumentNullException(nameof(queryLogic));
+            _commandLogic = commandLogic ?? throw new ArgumentNullException(nameof(commandLogic));
             Load += ChangeClothingForm_Load;   
             bChange.Click += BChange_Click;
             bCancel.Click += BCancel_Click;
@@ -106,7 +117,7 @@ namespace WinForms
             try
             {
                 Clothing newClothing = new Clothing(Id, name, category, size, price);
-                MainForm._logic.ChangeClothing(newClothing);
+                _commandLogic.ChangeClothing(newClothing);
             }
             catch (Exception ex)
             {
@@ -136,7 +147,7 @@ namespace WinForms
             Clothing? current;
             try
             {
-                current = MainForm._logic.GetClothingById(Id);
+                current = _queryLogic.GetClothingById(Id);
             }
             catch (Exception ex)
             {

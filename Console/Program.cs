@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer;
-using Model;
 using Logic;
+using Model;
+using Ninject;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace ClothingStore.ConsoleApp
 {
@@ -18,10 +20,9 @@ namespace ClothingStore.ConsoleApp
     internal class Program
     {
         /// <summary>
-        /// Объект бизнес-логики для управления товарами на складе.
+        /// DI контейнер
         /// </summary>
-        private static Logic.Logic _logic = new Logic.Logic(new EntityRepository<Clothing>());
-
+        public static IKernel Kernel { get; private set; }
         /// <summary>
         /// Выбранный фильтр по размеру. null - фильтр выключен.
         /// </summary>
@@ -38,9 +39,16 @@ namespace ClothingStore.ConsoleApp
         /// <param name="args">Аргументы командной строки.</param>
         static void Main(string[] args)
         {
-            if (_logic.GetAll().Count == 0)
+            Kernel = new StandardKernel(new SimpleConfigModule());
+            IClothingQuery _query = Kernel.Get<IClothingQuery>();
+            IClothingCommand _command = Kernel.Get<IClothingCommand>();
+            IClothingFilter _filter = Kernel.Get<IClothingFilter>();
+            if (_query.GetAll().Count == 0)
             {
-                _logic.FilledTable();
+                if (_command is Logic.Logic concreteLogic)
+                {
+                    concreteLogic.FilledTable();
+                }
             }
 
             while (true)
@@ -50,7 +58,7 @@ namespace ClothingStore.ConsoleApp
                 Console.WriteLine("Фильтры: размер - " + (_sizeFilter.HasValue ? _sizeFilter.Value.ToString() : "все") +
                                   ", категория - " + (_categoryFilter.HasValue ? _categoryFilter.Value.ToString() : "все") + "\n");
 
-                List<Clothing> list = GetFilteredList();
+                List<Clothing> list = GetFilteredList(_filter, _query);
                 PrintTable(list);
 
                 Console.WriteLine("\n\t[1] Добавить");
@@ -65,13 +73,13 @@ namespace ClothingStore.ConsoleApp
                 switch (ReadInput())
                 {
                     case "1":
-                        AddClothing();
+                        AddClothing(_command);
                         break;
                     case "2":
-                        ChangeClothing(list);
+                        ChangeClothing(list, _command);
                         break;
                     case "3":
-                        RemoveClothing(list);
+                        RemoveClothing(list, _command);
                         break;
                     case "4":
                         AskFilter("Размер", ref _sizeFilter);
@@ -96,16 +104,19 @@ namespace ClothingStore.ConsoleApp
         /// <summary>
         /// Возвращает товары склада с учетом включенных фильтров (оба фильтра применяются одновременно)
         /// </summary>
-        private static List<Clothing> GetFilteredList()
+        /// <param name="_filter">Интерфейс фильтрации товаров</param>
+        /// <param name="_query">Интерфейс для чтения товаров</param>
+        /// <returns></returns>
+        private static List<Clothing> GetFilteredList(IClothingFilter _filter, IClothingQuery _query)
         {
-            List<Clothing> list = _logic.GetAll();
+            List<Clothing> list = _query.GetAll();
             if (_sizeFilter.HasValue)
             {
-                list = _logic.FilterBySize(list, _sizeFilter.Value);
+                list = _filter.FilterBySize(list, _sizeFilter.Value);
             }
             if (_categoryFilter.HasValue)
             {
-                list = _logic.FilterByCategory(list, _categoryFilter.Value);
+                list = _filter.FilterByCategory(list, _categoryFilter.Value);
             }
             return list;
         }
@@ -151,7 +162,8 @@ namespace ClothingStore.ConsoleApp
         /// <summary>
         /// Добавляет новый товар на склад. Артикул присваивается автоматически
         /// </summary>
-        private static void AddClothing()
+        /// <param name="_command">Интерфейс для добавления товаров</param>
+        private static void AddClothing(IClothingCommand _command)
         {
             ClearScreen();
             Console.WriteLine("--- ДОБАВЛЕНИЕ ТОВАРА ---\n");
@@ -163,7 +175,7 @@ namespace ClothingStore.ConsoleApp
             {
                 return;
             }
-            _logic.AddClothing(name, category, size, price);
+            _command.AddClothing(name, category, size, price);
             Console.WriteLine("\nТовар добавлен!");
             Pause();
         }
@@ -172,7 +184,8 @@ namespace ClothingStore.ConsoleApp
         /// Изменяет выбранный товар (артикул сохраняется)
         /// </summary>
         /// <param name="clothes">Список товаров, отображаемый в таблице</param>
-        private static void ChangeClothing(List<Clothing> clothes)
+        /// <param name="_command">Интерфейс для изменения товаров</param>
+        private static void ChangeClothing(List<Clothing> clothes, IClothingCommand _command)
         {
             if (clothes.Count == 0)
             {
@@ -199,7 +212,7 @@ namespace ClothingStore.ConsoleApp
             {
                 return;
             }
-            _logic.ChangeClothing(new Clothing(item.Id, name, category, size, price));
+            _command.ChangeClothing(new Clothing(item.Id, name, category, size, price));
             Console.WriteLine("\nТовар изменен!");
             Pause();
         }
@@ -208,7 +221,8 @@ namespace ClothingStore.ConsoleApp
         /// Удаляет выбранный товар со склада
         /// </summary>
         /// <param name="clothes">Список товаров, отображаемый в таблице</param>
-        private static void RemoveClothing(List<Clothing> clothes)
+        /// <param name="_command">Интерфейс для удаления товаров</param>
+        private static void RemoveClothing(List<Clothing> clothes, IClothingCommand _command)
         {
             if (clothes.Count == 0)
             {
@@ -221,7 +235,7 @@ namespace ClothingStore.ConsoleApp
             {
                 return;
             }
-            _logic.RemoveClothing(item.Id);
+            _command.RemoveClothing(item.Id);
             Console.WriteLine("Товар удален!");
             Pause();
         }
