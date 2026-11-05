@@ -106,7 +106,7 @@ namespace WinForms
             try
             {
                 Clothing newClothing = new Clothing(Id, name, category, size, price);
-                SearchByIDForm._logic.ChangeClothing(newClothing);
+                MainForm._logic.ChangeClothing(newClothing);
             }
             catch (Exception ex)
             {

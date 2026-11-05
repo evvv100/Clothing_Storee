@@ -107,7 +107,7 @@ namespace WinForms
 
             try
             {
-                SearchByIDForm._logic.AddClothing(name, category, size, price);
+                MainForm._logic.AddClothing(name, category, size, price);
             }
             catch (Exception ex)
             {
