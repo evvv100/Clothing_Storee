@@ -20,11 +20,13 @@ namespace Logic
         /// </summary>
         public override void Load()
         {
-            Bind<IClothingCommand, IClothingQuery, IClothingFilter>()
-            .To<Logic>()
-            .InSingletonScope();
-
             Bind<IRepository<Clothing>>().To<EntityRepository<Clothing>>().InSingletonScope();
+
+            Bind<IClothingCommand>().To<ClothingCommand>().InSingletonScope();
+            Bind<IClothingQuery>().To<ClothingQuery>().InSingletonScope();
+            Bind<IClothingFilter>().To<ClothingFilter>().InSingletonScope();
+
+            Bind<ILogic>().To<Logic>().InSingletonScope();
         }
     }
 }

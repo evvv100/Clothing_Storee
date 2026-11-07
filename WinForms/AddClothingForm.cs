@@ -20,14 +20,14 @@ namespace WinForms
         /// <summary>
         /// Интерфейс для добавления товара.
         /// </summary>
-        private readonly IClothingCommand _clothingCommand;
+        private readonly ILogic _logic;
         /// <summary>
         /// Инициализирует новый экземпляр формы AddClothingForm, настраивает интерфейс и подписывается на события.
         /// </summary>
-        public AddClothingForm(IClothingCommand clothingCommand)
+        public AddClothingForm(ILogic logic)
         {
             InitializeComponent();
-            _clothingCommand = clothingCommand;
+            _logic = logic;
             bAdd.Click += Add_Click;
             bCancel.Click += BCancel_Click;
 
@@ -113,7 +113,7 @@ namespace WinForms
 
             try
             {
-                _clothingCommand.AddClothing(name, category, size, price);
+                _logic.AddClothing(name, category, size, price);
             }
             catch (Exception ex)
             {

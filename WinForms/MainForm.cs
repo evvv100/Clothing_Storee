@@ -15,27 +15,17 @@ namespace WinForms
     public partial class MainForm : Form
     {
         /// <summary>
-        /// Интерфейс для чтения и поиска товаров.
+        /// Интерфейс для чтения, фильтрации и поиска товаров.
         /// </summary>
-        private readonly IClothingQuery _queryLogic;
-        /// <summary>
-        /// Интерфейс для фильтрации товаров.
-        /// </summary>
-        private readonly IClothingFilter _filterLogic;
-        /// <summary>
-        /// Интерфейс для изменения, добавления и удаления товаров.
-        /// </summary>
-        private readonly IClothingCommand _commandLogic;
+        private readonly ILogic _logic;
         /// <summary>
         /// Инициализирует новый экземпляр формы SearchByIDForm, настраивает таблицу и фильтры, подписывается на события.
         /// </summary>
-        public MainForm(IClothingCommand clothingCommand, IClothingFilter clothingFilter, IClothingQuery clothingQuery)
+        public MainForm(ILogic logic)
         {
             InitializeComponent();
 
-            _commandLogic = clothingCommand;
-            _filterLogic = clothingFilter;
-            _queryLogic = clothingQuery;
+            _logic = logic;
             bChange.Click += BChange_Click;
             bCancel.Click += BCancel_Click;
             bRemove.Click += BRemove_Click;
@@ -110,7 +100,7 @@ namespace WinForms
             }
             try
             {
-                _commandLogic.RemoveClothing(item.Id);
+                _logic.RemoveClothing(item.Id);
                 MessageBox.Show("Товар удален!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (InvalidOperationException)
@@ -130,14 +120,14 @@ namespace WinForms
         /// <returns>Список товаров для отображения в таблице</returns>
         private List<Clothing> GetFilteredList()
         {
-            List<Clothing> list = _queryLogic.GetAll();
+            List<Clothing> list = _logic.GetAll();
             if (checkBox1.Checked && cSize.SelectedItem is ClothingSize size)
             {
-                list = _filterLogic.FilterBySize(list, size);
+                list = _logic.FilterBySize(list, size);
             }
             if (checkBox2.Checked && cCategory.SelectedItem is ClothingCategory category)
             {
-                list = _filterLogic.FilterByCategory(list, category);
+                list = _logic.FilterByCategory(list, category);
             }
             return list;
         }

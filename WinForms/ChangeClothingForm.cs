@@ -19,13 +19,9 @@ namespace WinForms
     public partial class ChangeClothingForm : Form
     {
         /// <summary>
-        /// Интерфейс для чтения данных товара (поиск по ID).
+        /// Интерфейс для чтения данных и изменения товара (поиск по ID).
         /// </summary>
-        private readonly IClothingQuery _queryLogic;
-        /// <summary>
-        /// Интерфейс для изменения данных товара.
-        /// </summary>
-        private readonly IClothingCommand _commandLogic;
+        private readonly ILogic _logic;
         /// <summary>
         /// Уникальный идентификатор (артикул) редактируемого товара.
         /// </summary>
@@ -34,12 +30,11 @@ namespace WinForms
         /// Инициализирует новый экземпляр формы ChangeClothingForm для указанного ID товара, настраивает интерфейс и подписывается на события.
         /// </summary>
         /// <param name="id">Идентификатор товара, который нужно изменить.</param>
-        public ChangeClothingForm(int id, IClothingQuery queryLogic, IClothingCommand commandLogic)
+        public ChangeClothingForm(int id, ILogic logic)
         {
             InitializeComponent();
 
-            _queryLogic = queryLogic ?? throw new ArgumentNullException(nameof(queryLogic));
-            _commandLogic = commandLogic ?? throw new ArgumentNullException(nameof(commandLogic));
+            _logic = logic;
             Load += ChangeClothingForm_Load;   
             bChange.Click += BChange_Click;
             bCancel.Click += BCancel_Click;
@@ -117,7 +112,7 @@ namespace WinForms
             try
             {
                 Clothing newClothing = new Clothing(Id, name, category, size, price);
-                _commandLogic.ChangeClothing(newClothing);
+                _logic.ChangeClothing(newClothing);
             }
             catch (Exception ex)
             {
@@ -147,7 +142,7 @@ namespace WinForms
             Clothing? current;
             try
             {
-                current = _queryLogic.GetClothingById(Id);
+                current = _logic.GetClothingById(Id);
             }
             catch (Exception ex)
             {

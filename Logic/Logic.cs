@@ -8,22 +8,19 @@ namespace Logic
     /// </summary>
     public class Logic : ILogic
     {
-        /// <summary>
-        /// Репозиторий для доступа к данным и постоянному хранилищу одежды.
-        /// </summary>
-        private readonly IRepository<Clothing> _repository;
+        private readonly IClothingCommand _command;
+        private readonly IClothingQuery _query;
+        private readonly IClothingFilter _filter;
         /// <summary>
         /// Инициализирует новый экземпляр класса Logic с заданным репозиторием.
         /// </summary>
         /// <param name="repository">Экземпляр репозитория для работы с данными.</param>
         /// <exception cref="ArgumentNullException">Исключение генерируется, если переданный репозиторий равен null.</exception>
-        public Logic(IRepository<Clothing> repository)
+        public Logic(IClothingCommand command, IClothingQuery query, IClothingFilter filter)
         {
-            if (repository == null)
-            {
-                throw new ArgumentNullException(nameof(repository));
-            }
-            _repository = repository;
+            _command = command ?? throw new ArgumentNullException(nameof(command));
+            _query = query ?? throw new ArgumentNullException(nameof(query));
+            _filter = filter ?? throw new ArgumentNullException(nameof(filter));
         }
 
         /// <summary>
@@ -35,8 +32,7 @@ namespace Logic
         /// <param name="price">Цена товара.</param>
         public void AddClothing(string name, ClothingCategory category, ClothingSize size, int price)
         {
-            var clothing = new Clothing(0, name, category, size, price);
-            _repository.Add(clothing);
+            _command.AddClothing(name, category, size, price);
         }
         /// <summary>
         /// Удаляет товар со склада по ID.
@@ -45,12 +41,7 @@ namespace Logic
         /// <exception cref="InvalidOperationException">Генерируется, если товар не найден на складе.</exception>
         public void RemoveClothing(int id)
         {
-            Clothing existing = _repository.ReadById(id);
-            if (existing == null)
-            {
-                throw new InvalidOperationException("Товар не найден в каталоге.");
-            }
-            _repository.Delete(id);
+            _command.RemoveClothing(id);
         }
         /// <summary>
         /// Возвращает список всех товаров, хранящихся на складе.
@@ -58,7 +49,7 @@ namespace Logic
         /// <returns>Список объектов Clothing.</returns>
         public List<Clothing> GetAll()
         {
-            return _repository.ReadAll();
+            return _query.GetAll();
         }
 
         /// <summary>
@@ -68,7 +59,7 @@ namespace Logic
         /// <returns>Объект Clothing или null, если товар не найден.</returns>
         public Clothing GetClothingById(int id)
         {
-            return _repository.ReadById(id);
+            return _query.GetClothingById(id);
         }
 
         /// <summary>
@@ -78,16 +69,7 @@ namespace Logic
         /// <exception cref="InvalidOperationException">Генерируется, если товар не найден на складе.</exception>
         public void ChangeClothing(Clothing clothing)
         {
-            Clothing existing = _repository.ReadById(clothing.Id);
-            if (existing == null)
-            {
-                throw new InvalidOperationException("Товар не найден на складе.");
-            }
-            existing.Name = clothing.Name.Trim();
-            existing.Category = clothing.Category;
-            existing.Size = clothing.Size;
-            existing.Price = clothing.Price;
-            _repository.Update(existing);
+            _command.ChangeClothing(clothing);
         }
         /// <summary>
         /// Возвращает список товаров указанного размера.
@@ -98,11 +80,7 @@ namespace Logic
         /// <exception cref="ArgumentNullException">Генерируется, если список равен null.</exception>
         public List<Clothing> FilterBySize(List<Clothing> source, ClothingSize size)
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-            return source.Where(c => c.Size == size).ToList();
+            return _filter.FilterBySize(source, size);
         }
 
         /// <summary>
@@ -114,11 +92,7 @@ namespace Logic
         /// <exception cref="ArgumentNullException">Если переданный список равен null.</exception>
         public List<Clothing> FilterByCategory(List<Clothing> source, ClothingCategory category)
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-            return source.Where(c => c.Category == category).ToList();
+            return _filter.FilterByCategory(source, category);
         }
         /// <summary>
         /// Заполняет хранилище данных начальным тестовым набором одежды разного типа и размеров.
